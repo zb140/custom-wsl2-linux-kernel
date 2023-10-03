@@ -295,7 +295,7 @@ git_ver_fn()
 git_ver_fn 'microsoft/WSL2-Linux-Kernel' '1' 'R'
 if build 'wsl2-linux-kernel' "$g_ver"; then
     download "$g_url" "$g_ver.tar.gz"
-    echo 'yes' | make KCONFIG_CONFIG=Microsoft/config-wsl -j "$cpu_cores"
+    echo 'yes' | make KCONFIG_CONFIG=../config-wsl -j "$cpu_cores"
     build_done 'wsl2-linux-kernel' "$g_ver"
 fi
 
