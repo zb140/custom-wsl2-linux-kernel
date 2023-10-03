@@ -234,7 +234,7 @@ build_pkgs_fn()
     echo 'Installing required apt packages'
     echo '=================================='
 
-    pkgs=(build-essential curl flex bison dwarves gcc g++ gcc-12 g++-12 jq libssl-dev libelf-dev)
+    pkgs=(build-essential curl flex bison dwarves gcc g++ gcc-12 g++-12 jq libssl-dev libelf-dev bc)
 
     for pkg in ${pkgs[@]}
     do
@@ -261,42 +261,12 @@ build_pkgs_fn()
 # install required apt packages
 build_pkgs_fn
 
-git_1_fn()
-{
-    # SCRAPE GITHUB WEBSITE FOR LATEST REPO VERSION
-    gh_repo="$1"
-    gh_url="$2"
+VERSION=5.15.123.1
 
-    if curl_cmd="$(curl -m '5' -sSL "https://api.github.com/repos/$gh_repo/$gh_url")"; then
-        g_ver="$(echo "$curl_cmd" | jq -r '.[0].name')"
-        g_ver="${g_ver##* }"
-        g_url="$(echo "$curl_cmd" | jq -r '.[0].tarball_url')"
-    fi
-}
-
-git_ver_fn()
-{
-    local gv_url v_flag v_tag v_url url_tag
-
-    v_url="$1"
-    v_tag="$2"
-
-    if [ -n "$3" ]; then v_flag="$3"; fi
-
-    if [  "$v_flag" = 'T' ] && [  "$v_tag" = '1' ]; then
-        url_tag='git_1_fn' gv_url='tags'
-    elif [  "$v_flag" = 'R' ] && [  "$v_tag" = '1' ]; then
-        url_tag='git_1_fn'; gv_url='releases'
-    fi
-
-    "$url_tag" "$v_url" "$gv_url" 2>/dev/null
-}
-
-git_ver_fn 'microsoft/WSL2-Linux-Kernel' '1' 'R'
-if build 'wsl2-linux-kernel' "$g_ver"; then
-    download "$g_url" "$g_ver.tar.gz"
+if build 'wsl2-linux-kernel' "linux-msft-wsl-${VERSION}"; then
+    download "https://api.github.com/repos/microsoft/WSL2-Linux-Kernel/tarball/linux-msft-wsl-${VERSION}" "linux-msft-wsl-${VERSION}.tar.gz"
     echo 'yes' | make KCONFIG_CONFIG=../config-wsl -j "$cpu_cores"
-    build_done 'wsl2-linux-kernel' "$g_ver"
+    build_done 'wsl2-linux-kernel' "linux-msft-wsl-${VERSION}"
 fi
 
 exit_fn
