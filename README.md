@@ -1,30 +1,39 @@
-# Windows-WSL2-Kernel-build-script
-## Build the latest released kernel from Microsoft's GitHub Page
+# Custom WSL2 Linux Kernel
 
-###  Purpose
-  - Build the latest Microsoft WSL2 kernel release to link to your current distros.
+This repository is forked from the excellent [Windows WSL2 Kernel Build Script
+repo by
+slyfox1186](https://github.com/slyfox1186/windows-wsl2-kernel-build-script).
 
-### Supported Distros:
-  - Ubuntu
+This project aims to use GitHub Actions Workflows to produce and publish
+up-to-date, versioned custom builds of
+[WSL2-Linux-Kernel](https://github.com/microsoft/WSL2-Linux-Kernel) with
+[`HIDDEV`](https://docs.kernel.org/hid/hiddev.html) and
+[`HIDRAW`](https://docs.kernel.org/hid/hidraw.html) enabled.
 
-####  Supported architecture
-  - x86_x64
+These custom kernels builds can be used to enable full Yubikey passthrough to
+WSL2 using [`usbipd`](https://github.com/dorssel/usbipd-win), with full FIDO2
+functionality.
 
-###  Install info
-  - Run the below command in your WSL window
-  ```
-  wget -qO build-kernel https://wsl2.optimizethis.net; sudo bash build-kernel
-  ```
-  
-  - The new kernel will be located in the root build directory
-    - The filename will be: `vmlinux`
-  - Place the file `vmlinux` into a folder inside Windows `%USERPROFILE%`
-    - I placed mine into the folder I created called `%USERPROFILE%\WSL2\vmlinux`
+The versioning scheme of this project matches the versioning scheme used by
+WSL2-Linux-Kernel.
 
-  - Create a file called `%USERPROFILE%\.wslconfig`
-   
-  - Visit the below website for instructions on how to link the kernel to WSL2 
-    - https://learn.microsoft.com/en-us/windows/wsl/wsl-config
-  - You can also check out my person script that I use as well for ideas.
+## Usage
 
-    My personal [.wslconfig](https://github.com/slyfox1186/windows-wsl2-kernel-build-script/blob/main/.wslconfig) file
+- Download the custom kernel from the releases page
+- Make sure you have saved all your work in all WSL2 instances
+- Shutdown all WSL2 instances with `wsl --shutdown`
+- Edit (or create) the ~/.wslconfig file on Windows
+- Specify the path to the custom kernel
+
+```ini
+# For example...
+[wsl2]
+kernel=C:\\Users\\YOUR_USERNAME\\Downloads\\vmlinux
+```
+
+- Start a WSL2 instance
+- Check that the kernel is running with `uname -sr`
+
+```
+Linux 5.15.123.1-lgug2z-custom-WSL2
+```

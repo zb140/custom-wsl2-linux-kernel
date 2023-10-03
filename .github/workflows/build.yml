@@ -6,6 +6,8 @@ on:
       - master
       - feature/*
       - hotfix/*
+    tags:
+      - linux-msft-wsl-*
   pull_request: {}
   workflow_call: {}
 
