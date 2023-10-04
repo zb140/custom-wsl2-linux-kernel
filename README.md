@@ -37,3 +37,13 @@ kernel=C:\\Users\\YOUR_USERNAME\\Downloads\\vmlinux
 ```
 Linux 5.15.123.1-lgug2z-custom-WSL2
 ```
+
+## Modification
+
+If you want to build and publish your own custom WSL2 Linux Kernel, you can
+fork this repository and make whatever configuration modifications in
+[config-wsl](config.wsl). The [GitHub Actions
+Workflow](.github/workflows/build.yml) will take care of the rest.
+
+Please take care to update `CONFIG_LOCALVERSION` to distinguish your custom
+kernel from this one.
